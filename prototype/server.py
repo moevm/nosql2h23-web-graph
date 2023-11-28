@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import neo4jTools
-from get_link import get_link
+from links_search import links_search
 
 app = Flask(__name__)
 
@@ -17,12 +17,24 @@ def get_search_form():
 @app.route('/', methods=["POST"])
 def enter_link():
     link = request.form.get("link")
-    temp = get_link(link)
-    for i in temp:
-        print(i)
-    print(len(temp))
 
-    #conn.query("CREATE (n:Test {link: " + link + "})", db="test")
+    nodes_counter = 0
+    limit = 1500
+    
+    while(nodes_counter < limit):
+        if link:
+            temp, nodes_counter = links_search(conn, link, limit, nodes_counter)
+        for i in temp:
+            if nodes_counter >= limit:
+                break
+            if i:
+                nodes_counter = links_search(conn, i, limit, nodes_counter)[1]
+        
+        if temp:
+            link = temp[0]
+        else:
+            break
+
     return jsonify({"message": "Link created successfully"})
 
 

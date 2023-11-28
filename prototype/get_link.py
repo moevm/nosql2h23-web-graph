@@ -19,4 +19,4 @@ def get_link(root_link):
         link_url = urljoin(root_link, link_raw_url)
         parsed_url = urlparse(link_url)
         result.add(parsed_url.scheme + "://" + parsed_url.netloc + parsed_url.path)
-    return result
+    return list(result)
