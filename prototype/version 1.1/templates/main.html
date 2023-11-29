@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title >ProjectName</title>
+    <link rel="stylesheet" href="../static/main.css" />
+    <script src="../static/main.js"></script>
+    <script src="../static/script.js"></script>
+    <script src="//unpkg.com/force-graph"></script>
+    <script defer src="{{url_for('static',filename = 'graph_update.js')}}"></script>
+    <link rel = "stylesheet" href="{{url_for('static',filename = 'main_page_style.css')}}">
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">-->
+</head>
+<body>
+
+<div id="root-index">
+    <div id="page-top">
+        <h1>Project_name</h1>
+        <div id="form2">
+            <input id="inp-page_address" type="text" name="page_address" placeholder="Enter the web-page address" />
+            <button id="btn-search_main" type="button" onclick="load_links()">Search</button>
+        </div>
+        <div id="form1">
+            <button id="btn-import" type="submit" onclick="Open_my_Dialog()">Import</button>
+            <button id="btn-export" type="submit" onclick="Open_my_Dialog()">Export</button>
+        </div>
+    </div>
+    <div id="workspace" style="visibility: hidden">
+        <div class="tab">
+            <button id="btn-Graph" class="tablinks" onclick="openTabs(event, 'Graph')">Graph</button>
+            <button id="btn-Table" class="tablinks" onclick="openTabs(event, 'Table')">Table</button>
+            <button id="btn-Settings" class="tablinks" onclick="openTabs(event, 'Settings')">Advanced settings</button>
+        </div>
+
+        <div id="Graph" class="tabcontent">
+<!--            <div id="container"></div>-->
+        </div>
+
+        <div id="Table" class="tabcontent">
+<!--            <h3>Test Content 2</h3>-->
+        </div>
+
+        <div id="Settings" class="tabcontent">
+<!--            <h3>Work in progress</h3>-->
+        </div>
+    </div>
+
+    <dialog id="myDialog">not available</dialog>
+
+</div>
+<div id="container"></div>
+</body>
+</html>
