@@ -42,8 +42,3 @@ def links_search(conn, link, limit, nodes_counter):
                     conn.query('MATCH (n:' + str(domain) +' {url: "' + str(link) + '"}) MATCH (s:' + str(temp_domain) + '{url: "' + str(i) +'"}) CREATE (n)-[m:LEADS_TO]->(s) SET m.datatime = "' + str(datetime.datetime.now()) +'"', db="test")
 
     return temp, nodes_counter
-    '''for i in temp:
-        if i:
-            if nodes_counter >= limit:
-                return
-            links_search(conn, i)'''
