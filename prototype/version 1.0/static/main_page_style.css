@@ -1,0 +1,22 @@
+#container{
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    height:700px;
+    width:600px;
+    border: 1px solid red;
+}
+
+#input_box{
+position: relative;
+    top: 70px;
+    left: 30px;
+    width:300px;
+    border-color:black;
+}
+
+#input{
+    border-color:rgb(81, 80, 80);
+}
