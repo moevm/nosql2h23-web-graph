@@ -20,6 +20,8 @@ def enter_link():
     nodes_counter = 0
     limit = 500
 
+    Link_loader.reset_active_nodes(db)
+
     while (nodes_counter < limit):
         if link:
             temp, nodes_counter = Link_loader.links_search(db, link, limit, nodes_counter)
