@@ -6,7 +6,7 @@ from Adapter import Adapter
 
 app = Flask(__name__)
 
-db = DatabaseController(database_url="bolt://localhost:7687", username="neo4j", password="12345678")
+db = DatabaseController(database_url="bolt://localhost:7687", username="Anton_Korsunov", password="123456789")
 
 
 @app.route('/', methods=["GET"])

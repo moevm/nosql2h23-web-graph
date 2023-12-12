@@ -36,11 +36,11 @@ class Link_loader:
                 if domain[0]:
                     if domain[0].isdigit():
                         domain = 'D' + domain
+                nodes_counter += 1
+                print(nodes_counter)
                 if not db.run_query('MATCH (n:' + str(domain) + ' {url:"' + str(link) + '"}) RETURN n'):
                     db.run_query('CREATE (n:' + str(domain) + ' {url:"' + str(link) + '", datatime:"' + str(
                         datetime.datetime.now()) + '"})')
-                    nodes_counter += 1
-                    print(nodes_counter)
                     if nodes_counter >= limit:
                         return temp, nodes_counter
 
@@ -52,11 +52,11 @@ class Link_loader:
                     if temp_domain[0]:
                         if temp_domain[0].isdigit():
                             temp_domain = 'D' + temp_domain
+                    nodes_counter += 1
+                    print(nodes_counter)
                     if not db.run_query('MATCH (n:' + str(temp_domain) + ' {url:"' + str(i) + '"}) RETURN n'):
                         db.run_query('CREATE (n:' + str(temp_domain) + ' {url:"' + str(i) + '", datatime:"' + str(
                             datetime.datetime.now()) + '"})')
-                        nodes_counter += 1
-                        print(nodes_counter)
                         if nodes_counter >= limit:
                             return temp, nodes_counter
 
