@@ -38,3 +38,34 @@ function load_links(){
     Graph.update_data();
     })
 }
+
+function export_graph(){
+    window.location.href = "/export";
+}
+
+function import_graph(){
+    let input = document.createElement('input');
+    input.type = 'file';
+
+    input.addEventListener('change', function () {
+        if (input.files.length > 0) {
+            var file = input.files[0];
+            upload_file(file);
+
+            input.value = '';
+        }
+    });
+    input.click();
+}
+
+function upload_file(file) {
+    let formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/import', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+}
+
