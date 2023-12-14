@@ -26,10 +26,11 @@ def export_graph():
 def import_graph():
 
     uploaded_file = request.files['file']
-    file_path = os.path.join(UPLOAD_FOLDER, uploaded_file.filename)
+    filename = uploaded_file.filename
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
     uploaded_file.save(file_path)
 
-    db.import_()
+    db.import_(filename)
     return jsonify({"message": "Link created successfully"})
 
 
