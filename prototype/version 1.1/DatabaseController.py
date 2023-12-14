@@ -24,8 +24,8 @@ class DatabaseController:
         self.run_query(temp_string)
         return end_path
 
-    def import_(self, file_name='test'):
-        query_string = "CALL apoc.import.graphml('" + file_name + ".graphml', {readLabels:true, storeNodeIds:true})"
+    def import_(self, file_name='test.graphml'):
+        query_string = "CALL apoc.import.graphml('" + file_name + "', {readLabels:true, storeNodeIds:true})"
         self.run_query(query_string)       
 
         query_string = """MATCH (a)
