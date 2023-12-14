@@ -18,5 +18,21 @@ class DatabaseController:
             self.driver.close()
             self.driver = None
 
+    def export(self, file_name='test'):
+        end_path = file_name + '.graphml'
+        temp_string = "CALL apoc.export.graphml.query('MATCH (n)-[m:LEADS_TO {is_active: 1}]->(r) RETURN n, r, m','" + end_path + "', {})"
+        self.run_query(temp_string)
+        return end_path
+
+    def import_(self, file_name='test'):
+        query_string = "CALL apoc.import.graphml('" + file_name + ".graphml', {readLabels:true, storeNodeIds:true})"
+        self.run_query(query_string)       
+
+        query_string = """MATCH (a)
+                    WITH a.url AS url, COLLECT(a) AS branches
+                    WHERE SIZE(branches) > 1
+                    FOREACH (n IN TAIL(branches) | DETACH DELETE n)"""
+        self.run_query(query_string)
+
 
 

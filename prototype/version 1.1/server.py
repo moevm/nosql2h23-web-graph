@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, jsonify
-
+from flask import Flask, render_template, request, jsonify, send_file
 from DatabaseController import DatabaseController
 from Link_loader import Link_loader
 from Adapter import Adapter
+import os
+
+UPLOAD_FOLDER = r'C:\NO_SQL_proj\relate-data\dbmss\dbms-fe9cad2d-7010-4966-a5ac-8d744843ce3c\import'
+
 
 app = Flask(__name__)
 
@@ -12,6 +15,22 @@ db = DatabaseController(database_url="bolt://localhost:7687", username="Anton_Ko
 @app.route('/', methods=["GET"])
 def load_main_page():
     return render_template("main.html")
+
+@app.route('/export', methods=["GET"])
+def export_graph():
+    end_path = db.export()
+    file_path = os.path.join(UPLOAD_FOLDER, end_path)
+    return send_file(file_path, as_attachment=True)
+
+@app.route('/import', methods=["POST"])
+def import_graph():
+
+    uploaded_file = request.files['file']
+    file_path = os.path.join(UPLOAD_FOLDER, uploaded_file.filename)
+    uploaded_file.save(file_path)
+
+    db.import_()
+    return jsonify({"message": "Link created successfully"})
 
 
 @app.route('/', methods=['POST'])
