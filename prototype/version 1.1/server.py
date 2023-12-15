@@ -9,7 +9,7 @@ UPLOAD_FOLDER = r'C:\NO_SQL_proj\relate-data\dbmss\dbms-fe9cad2d-7010-4966-a5ac-
 
 app = Flask(__name__)
 
-db = DatabaseController(database_url="bolt://localhost:7687", username="Anton_Korsunov", password="123456789")
+db = DatabaseController(database_url="bolt://localhost:7687", username="neo4j", password="12345678")
 
 
 @app.route('/', methods=["GET"])

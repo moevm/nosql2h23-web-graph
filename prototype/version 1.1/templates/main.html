@@ -27,29 +27,31 @@
             <button id="btn-export" type="submit" onclick="export_graph()">Export</button>
         </div>
     </div>
-    <div id="workspace" style="visibility: hidden">
+    <div id="workspace">
         <div class="tab">
             <button id="btn-Graph" class="tablinks" onclick="openTabs(event, 'Graph')">Graph</button>
             <button id="btn-Table" class="tablinks" onclick="openTabs(event, 'Table')">Table</button>
             <button id="btn-Settings" class="tablinks" onclick="openTabs(event, 'Settings')">Advanced settings</button>
+            <button id="btn-All-graph" class="tabparm" onclick="getAllGraph()">All graph</button>
+            <button id="btn-Last-graph" class="tabparm" onclick="getLastGraph()">Last graph</button>
         </div>
 
         <div id="Graph" class="tabcontent">
-<!--            <div id="container"></div>-->
+            <div id="container1" class="tabcontainer"></div>
         </div>
 
         <div id="Table" class="tabcontent">
-<!--            <h3>Test Content 2</h3>-->
+            <div id="container2" class="tabcontainer"></div>
         </div>
 
         <div id="Settings" class="tabcontent">
-<!--            <h3>Work in progress</h3>-->
+            <div id="container3" class="tabcontainer"></div>
         </div>
     </div>
 
-    <dialog id="myDialog">not available</dialog>
+    <dialog id="Dialog-not-available">not available</dialog>
 
 </div>
-<div id="container"></div>
+<!--<div id="container"></div>-->
 </body>
 </html>
