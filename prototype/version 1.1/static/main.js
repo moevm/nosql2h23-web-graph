@@ -26,3 +26,19 @@ function Open_my_Dialog() {
 
     // dialog_tab.close();
 }
+
+
+function optionSelect(id){
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="option-content" and hide them
+    tabcontent = document.getElementsByClassName("option-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(id).style.display = "block";
+    evt.currentTarget.className += " active";
+}

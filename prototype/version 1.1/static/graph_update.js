@@ -51,6 +51,27 @@ function getLastGraph(){
     window.location.href = "/last-graph";
 }
 
+function getPageRank(){
+    window.location.href = "/page-rank";
+}
+
+function getCentrality(){
+    let el = document.getElementById('sel-centr');
+    let option = el.options[el.selectedIndex].value;
+    window.location.href = "/centrality/"+option;
+}
+
+function getPath(){
+    input_val1 = document.getElementById('inp-page_address1').value
+    input_val2 = document.getElementById('inp-page_address2').value
+    fetch("/",{
+        method:'POST',
+        body: JSON.stringify([input_val,input_val2])
+    }).then(res=>{
+        Graph.update_data();
+    })
+}
+
 function import_graph(){
     let input = document.createElement('input');
     input.type = 'file';
@@ -76,6 +97,16 @@ function upload_file(file) {
     })
     .then(response => response.json())
 }
+
+function getOriginalGraph(){
+    window.location.href = "/original-graph";
+}
+
+function getStrong(){
+    window.location.href = "/strong-component";
+}
+
+
 
 function createTable() {
     var Arr = [
