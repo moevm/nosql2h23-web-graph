@@ -7,7 +7,7 @@
     <title >ProjectName</title>
     <link rel="stylesheet" href="../static/main.css" />
     <script src="../static/main.js"></script>
-    <script src="../static/script.js"></script>
+<!--    <script src="../static/script.js"></script>-->
     <script src="//unpkg.com/force-graph"></script>
     <script defer src="{{url_for('static',filename = 'graph_update.js')}}"></script>
     <link rel = "stylesheet" href="{{url_for('static',filename = 'main_page_style.css')}}">
@@ -27,29 +27,67 @@
             <button id="btn-export" type="submit" onclick="export_graph()">Export</button>
         </div>
     </div>
-    <div id="workspace" style="visibility: hidden">
+    <div id="workspace" >
         <div class="tab">
             <button id="btn-Graph" class="tablinks" onclick="openTabs(event, 'Graph')">Graph</button>
             <button id="btn-Table" class="tablinks" onclick="openTabs(event, 'Table')">Table</button>
             <button id="btn-Settings" class="tablinks" onclick="openTabs(event, 'Settings')">Advanced settings</button>
+            <button id="btn-All-graph" class="tabparm" onclick="getAllGraph()">All graph</button>
+            <button id="btn-Last-graph" class="tabparm" onclick="getLastGraph()">Last graph</button>
         </div>
 
         <div id="Graph" class="tabcontent">
-<!--            <div id="container"></div>-->
+            <div id="container1" class="tabcontainer"></div>
         </div>
 
         <div id="Table" class="tabcontent">
-<!--            <h3>Test Content 2</h3>-->
+            <div id="container2" class="tabcontainer"></div>
         </div>
 
         <div id="Settings" class="tabcontent">
-<!--            <h3>Work in progress</h3>-->
+            <div id="container3" class="tabcontainer">
+                <div class="custom-select">
+                    <select onchange="optionSelect(this.options[this.selectedIndex].value)">
+                        <option value="original-graph">Исходный граф</option>
+                        <option value="pathfinding">Поиск пути</option>
+                        <option value="strongly-connected-component">Компоненты сильной связности</option>
+                        <option value="centrality">Центральность</option>
+                        <option value="page-rank">Page Rank</option>
+                    </select>
+                </div>
+
+                <div class="option-content" id="original-graph">
+                    <button id="btn-original-graph" onclick="getOriginalGraph()">Применить</button>
+                </div>
+
+                <div class="option-content" id="pathfinding">
+                    <input id="inp-page_1" type="text" placeholder="Enter the web-page address" />
+                    <input id="inp-page_2" type="text" placeholder="Enter the web-page address" />
+                    <button id="btn-pathfinding" onclick="getPath()">Применить</button>
+                </div>
+
+                <div class="option-content" id="page-rank">
+                    <button id="btn-page-rank" onclick="getPageRank()">Применить</button>
+                </div>
+
+                <div class="option-content" id="centrality">
+                    <select id="sel-centr">
+                        <option value="0">По близости</option>
+                        <option value="1">По степени</option>
+                        <option value="2">По посредничеству</option>
+                    </select>
+                    <button id="btn-centrality" onclick="getCentrality()">Применить</button>
+                </div>
+
+                <div class="option-content" id="strongly-connected-component">
+                    <button id="btn-strongly-connected-component" onclick="getStrong()">Применить</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <dialog id="myDialog">not available</dialog>
+    <dialog id="Dialog-not-available">not available</dialog>
 
 </div>
-<div id="container"></div>
 </body>
 </html>
