@@ -27,7 +27,7 @@
             <button id="btn-export" type="submit" onclick="export_graph()">Export</button>
         </div>
     </div>
-    <div id="workspace">
+    <div id="workspace" >
         <div class="tab">
             <button id="btn-Graph" class="tablinks" onclick="openTabs(event, 'Graph')">Graph</button>
             <button id="btn-Table" class="tablinks" onclick="openTabs(event, 'Table')">Table</button>
@@ -46,7 +46,7 @@
 
         <div id="Settings" class="tabcontent">
             <div id="container3" class="tabcontainer">
-                <div class="custom-select" style="width:200px;">
+                <div class="custom-select">
                     <select onchange="optionSelect(this.options[this.selectedIndex].value)">
                         <option value="original-graph">Исходный граф</option>
                         <option value="pathfinding">Поиск пути</option>
