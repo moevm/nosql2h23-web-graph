@@ -7,6 +7,7 @@ import os
 UPLOAD_FOLDER = r'C:\NO_SQL_proj\relate-data\dbmss\dbms-fe9cad2d-7010-4966-a5ac-8d744843ce3c\import'
 
 
+
 app = Flask(__name__)
 
 db = DatabaseController(database_url="bolt://localhost:7687", username="Anton_Korsunov", password="123456789")
@@ -62,6 +63,10 @@ def enter_link():
 @app.route('/graph_data', methods=["GET"])
 def update_graph_data():
     return Adapter.get_graph(db)
+
+@app.route('/all_graph', methods=["GET"])
+def show_all_graph():
+    return Adapter.get_all_graph(db)
 
 
 app.run(host="127.0.0.1", port=3000)
