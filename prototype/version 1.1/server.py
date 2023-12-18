@@ -63,5 +63,9 @@ def enter_link():
 def update_graph_data():
     return Adapter.get_graph(db)
 
+@app.route('/all_graph', methods=["GET"])
+def show_all_graph():
+    return Adapter.get_all_graph(db)
+
 
 app.run(host="127.0.0.1", port=3000)
