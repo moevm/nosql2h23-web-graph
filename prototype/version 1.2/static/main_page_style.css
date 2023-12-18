@@ -1,0 +1,58 @@
+#container{
+    position: absolute;
+
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    height:500px;
+    width:900px;
+    border: 1px solid red;
+}
+
+
+
+
+
+#input_box{
+position: relative;
+    top: 70px;
+    left: 30px;
+    width:300px;
+   border-color:black;
+}
+
+#strong_connected{
+    position: absolute;
+    left:600px;
+    top:70px;
+}
+
+#page_rank{
+    position: absolute;
+    left:800px;
+    top:70px;
+
+}
+
+#centrality{
+    position: absolute;
+    left:950px;
+    top:70px;
+}
+
+#input{
+   border-color:rgb(81, 80, 80);
+}
+
+#find_path{
+    position: absolute;
+    left: 1100px;
+    top: 70px;
+}
+
+#back{
+    position: absolute;
+    left:1250px;
+    top:70px;
+}
+
