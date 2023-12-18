@@ -149,8 +149,13 @@ button {
 
 .tab {
     overflow: hidden;
+    position: absolute;
+    left: 50%;
+    width: 70%;
+    transform: translateX(-50%);
     /*margin-left: 5%;*/
     /*border: 1px solid #ccc;*/
+    border-bottom: 1px solid #777676;
     /*background-color: #f1f1f1;*/
 }
 
@@ -160,11 +165,12 @@ button {
     background-color: inherit;
     float: left;
     border: 1px solid #777676;
+    border-bottom: none;
     border-radius: 10px 10px 0 0;
     outline: none;
     cursor: pointer;
     padding: 10px 10px;
-    width: 15%;
+    width: 20%;
     transition: 0.3s;
     font-size: 1rem;
 }
@@ -207,6 +213,7 @@ button {
     background-color: #cbcbcb;
     float: left;
     border: 1px solid #777676;
+    border-bottom: none;
     border-radius: 10px 10px 0 0;
     outline: none;
     cursor: pointer;
@@ -252,7 +259,6 @@ button {
     display: block;
 }
 
-/*-------------------всплывающее окно----------------------*/
 
 #myDialog{
     position: absolute;
@@ -267,3 +273,5 @@ button {
     border-radius: 20px;
     font-family: Calibri;
 }
+
+

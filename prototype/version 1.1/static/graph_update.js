@@ -1,5 +1,3 @@
-
-
 class Graph{
 
     static graph = ForceGraph()
@@ -22,10 +20,13 @@ class Graph{
     static update_data(path){
         fetch(path).then(res => res.json()).then(input =>{
             Graph.graph.graphData(input);
-            createTable();
+            
+            var data =
+                [{domain: "github.com", url: "wikipedia.org/some_page"},
+                {domain: "wikipedia",url: "wikipedia.org/some_page"}];
+            createTable(data);
         })
     }
-
 }
 
 function load_links(){
@@ -52,7 +53,7 @@ function export_graph(){
 }
 
 function getPageRank(){
-    window.location.href = "/page_rank";
+    window.location.href = "/page-rank";
 }
 
 function getCentrality(){
@@ -98,88 +99,54 @@ function upload_file(file) {
     .then(response => response.json())
 }
 
-function getOriginalGraph(){
-    window.location.href = "/original-graph";
-}
-
 function getStrong(){
     window.location.href = "/strong-component";
 }
 
 
+function createTable(data) {
 
-function createTable() {
-    var Arr = [
-        ["Сайт 1", "http://site1.com"],
-        ["Сайт 2", "http://site2.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        ["Сайт 3", "http://site3.com"],
-        // Добавьте другие строки данных, если необходимо
-    ];
-
-    // Создание элемента div с классом "scroll-table"
     var scrollTableDiv = document.createElement("div");
     scrollTableDiv.className = "scroll-table";
 
-    // Создание элемента table
     var table = document.createElement("table");
-
-    // Создание элемента thead
     var thead = document.createElement("thead");
-
-    // Создание строки заголовка (thead)
     var headerRow = document.createElement("tr");
 
     // Заголовки столбцов
-    var headers = ["Сайт", "URL"];
+    var headers = ["Домен", "URL"];
 
-    // Добавление заголовков в строку заголовка
-    headers.forEach(function(headerText) {
+    headers.forEach(function(headerText, index) {
         var th = document.createElement("th");
         th.textContent = headerText;
+
+        // Установка ширины столбцов
+        if (index === 0) {
+            th.style.width = "30%";
+        } else if (index === 1) {
+            th.style.width = "70%";
+        }
+
         headerRow.appendChild(th);
     });
 
-    // Добавление строки заголовка в thead
     thead.appendChild(headerRow);
-
-    // Добавление thead в таблицу
     table.appendChild(thead);
 
-    // Создание элемента tbody
     var tbody = document.createElement("tbody");
 
-    // Создание строк и ячеек для тела таблицы
-    Arr.forEach(function(rowData) {
+    data.forEach(function(rowData) {
         var row = document.createElement("tr");
 
-        rowData.forEach(function(cellData, index) {
+        Object.values(rowData).forEach(function(cellData, index) {
             var td = document.createElement("td");
-            if (index === 1) {
-                // Если это второй столбец, создаем ссылку
+            if (index === 0) { // Домен
+                td.textContent = cellData;
+            } else if (index === 1) { // URL
                 var link = document.createElement("a");
                 link.href = cellData;
                 link.textContent = cellData;
                 td.appendChild(link);
-            } else {
-                td.textContent = cellData;
             }
             row.appendChild(td);
         });
@@ -187,15 +154,9 @@ function createTable() {
         tbody.appendChild(row);
     });
 
-    // Добавление tbody в таблицу
     table.appendChild(tbody);
-
-    // Добавление таблицы в div с классом "scroll-table"
     scrollTableDiv.appendChild(table);
 
-    // Получение контейнера по id "container"
     var container = document.getElementById("container2");
-
-    // Добавление div с классом "scroll-table" в контейнер
     container.appendChild(scrollTableDiv);
 }

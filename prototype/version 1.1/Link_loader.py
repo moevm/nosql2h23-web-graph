@@ -7,15 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 class Link_loader:
-
-    #@staticmethod
-    #def degree_centrality
-       # db.run_query
-
-    #@staticmethod 
-    #def shortest_path(db, url1, url2): #кратчайший путь между двумя вершинами (надо передать url-ы)
-    #    db.run_query('MATCH path = shortestPath(({url: "' + url1 + '"})-[*]->({url: "' + url2 + '"})) RETURN path')
-
+    
     @staticmethod
     def reset_active_nodes(db):
         db.run_query('MATCH (n) SET n.is_active = 0')
