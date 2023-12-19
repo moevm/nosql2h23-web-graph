@@ -4,12 +4,14 @@ from Link_loader import Link_loader
 from Adapter import Adapter
 import os
 
-UPLOAD_FOLDER = r'C:\NO_SQL_proj\relate-data\dbmss\dbms-fe9cad2d-7010-4966-a5ac-8d744843ce3c\import'
 
 
 app = Flask(__name__)
 
-db = DatabaseController(database_url="bolt://localhost:7687", username="neo4j", password="12345678")
+db = DatabaseController(database_url="bolt://localhost:7687", username="Anton_Korsunov", password="123456789")
+
+#UPLOAD_FOLDER = r'C:\NO_SQL_proj\relate-data\dbmss\dbms-8f9392ec-8f03-45da-bf33-666003422b26\import'
+UPLOAD_FOLDER = db.get_path()
 
 
 @app.route('/', methods=["GET"])
@@ -19,6 +21,7 @@ def load_main_page():
 @app.route('/export', methods=["GET"])
 def export_graph():
     end_path = db.export()
+    #print(end_path)
     file_path = os.path.join(UPLOAD_FOLDER, end_path)
     return send_file(file_path, as_attachment=True)
 
@@ -62,6 +65,10 @@ def enter_link():
 @app.route('/graph_data', methods=["GET"])
 def update_graph_data():
     return Adapter.get_graph(db)
+
+@app.route('/all_graph', methods=["GET"])
+def show_all_graph():
+    return Adapter.get_all_graph(db)
 
 
 app.run(host="127.0.0.1", port=3000)
