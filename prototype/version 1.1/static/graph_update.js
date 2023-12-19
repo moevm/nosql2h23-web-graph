@@ -1,5 +1,3 @@
-
-
 class Graph{
 
     static graph = ForceGraph()
@@ -19,17 +17,16 @@ class Graph{
       Graph.graph.height(document.getElementById('container1').offsetHeight);
     }
 
-    static update_data(){
-        fetch("/graph_data").then(res => res.json()).then(input =>{
+    static update_data(path){
+        fetch(path).then(res => res.json()).then(input =>{
             Graph.graph.graphData(input);
-
+            
             var data =
                 [{domain: "github.com", url: "wikipedia.org/some_page"},
                 {domain: "wikipedia",url: "wikipedia.org/some_page"}];
             createTable(data);
         })
     }
-
 }
 
 function load_links(){
@@ -39,20 +36,20 @@ function load_links(){
         method:'POST',
         body: input_val
     }).then(res=>{
-    Graph.update_data();
+    Graph.update_data("/graph_data");
     })
+}
+
+function getLastGraph(){
+    Graph.update_data("/graph_data");
+}
+
+function getAllGraph(){
+    Graph.update_data("/all_graph");
 }
 
 function export_graph(){
     window.location.href = "/export";
-}
-
-function getAllGraph(){
-    window.location.href = "/all-graph";
-}
-
-function getLastGraph(){
-    window.location.href = "/last-graph";
 }
 
 function getPageRank(){
@@ -100,10 +97,6 @@ function upload_file(file) {
         body: formData
     })
     .then(response => response.json())
-}
-
-function getOriginalGraph(){
-    window.location.href = "/original-graph";
 }
 
 function getStrong(){
