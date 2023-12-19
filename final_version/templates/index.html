@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title >ProjectName</title>
+  <link rel="stylesheet" href="../static/index.css" />
+  <script src="../static/script.js"></script>
+  <script src="//unpkg.com/force-graph"></script>
+  <script defer src="{{url_for('static',filename = 'graph_update.js')}}"></script>
+</head>
+<body>
+
+<div id="root-index">
+
+  <div id="form1">
+    <button id="btn-import" type="submit" onclick="Open_my_Dialog()">Import
+    </button>
+    <button id="btn-export" type="submit" onclick="Open_my_Dialog()">Export
+    </button>
+  </div>
+
+  <h1>Project_name</h1>
+
+  <form action="main.html" method="get" id="form2">
+    <input id="inp-page_address" type="text" name="page_address" placeholder="Enter the web-page address" />
+    <button id="btn-search_main" type="submit" onclick="load_links()">Search
+    </button>
+  </form>
+
+  <dialog id="myDialog">not available</dialog>
+
+</div>
+</body>
+</html>
