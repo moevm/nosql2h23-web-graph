@@ -23,6 +23,7 @@ class Graph_transformer{
     Именно ответ сервера(т.е. список id вешрин) будет передан в качестве агрумента функции callback
     */ 
     static find_path_mode(callback=null){
+        Graph_transformer.to_inital_state()
         Graph_transformer._path_mode = true;
         let id=[];
         Graph.graph.autoPauseRedraw(false);
@@ -78,6 +79,7 @@ class Graph_transformer{
     т.е. это будет объект ключи которого -id вершин, а значения этих ключей- номер компоненты сильной связности,которой эта
     вершина принадлежит.  */
     static  strongly_connected_algorithm(callback=null){
+        Graph_transformer.to_inital_state()
         let data= fetch('/algorithms/strongly_connected_components');
         data.then(response => response.json()).then((ans) => {
             Graph_transformer._process_strongly_connected(ans);
@@ -103,6 +105,7 @@ class Graph_transformer{
     Этот ответ будет иметь следующий вид: {235:0.153, 236:0.458, 237:0.786, 238:0.12, 239:0.141 }
     т.е. это будет объект ключи которого -id вершин, а значения этих ключей- значение page_rank для вершины с этим id.  */
     static page_rank_algorithm(callback=null){
+        Graph_transformer.to_inital_state()
         let res = {}
         let promise = fetch("/algorithms/page_rank")
         promise.then(resp=> resp.json()).then((ans)=>{
@@ -158,6 +161,7 @@ class Graph_transformer{
     т.е. это будет объект ключи которого -id вершин, а значения этих ключей- величина выбранной центральности(зависит от type)
     для вершины с этим id  */
     static centrality_algorithm(type,callback=null){
+        Graph_transformer.to_inital_state()
         let res= {};
         let promise = fetch(`/algorithms/centrality?type=${type}`)
         promise.then(resp=>resp.json()).then((ans)=>{
