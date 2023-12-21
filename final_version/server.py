@@ -8,7 +8,7 @@ import os
 
 app = Flask(__name__)
 
-db = DatabaseController(database_url="bolt://localhost:7687", username="Anton_Korsunov", password="123456789")
+db = DatabaseController(database_url="bolt://localhost:7687", username="nikita", password="123456789")
 alg_controller = Algorithms(db)
 UPLOAD_FOLDER = db.get_path()
 
