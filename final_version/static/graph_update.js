@@ -210,7 +210,7 @@ class Graph{
         fetch(path).then(res => res.json()).then(input =>{
             Graph.graph.graphData(input);
             Graph._init_id_map();
-
+          
             let data = []
             let temp = Graph.graph.graphData().nodes;
             temp.forEach(function(entry) {

@@ -8,7 +8,7 @@ import os
 
 app = Flask(__name__)
 
-db = DatabaseController(database_url="bolt://localhost:7687", username="nikita", password="123456789")
+db = DatabaseController(database_url="bolt://neo4j:7687", username="neo4j", password="123456789")
 alg_controller = Algorithms(db)
 UPLOAD_FOLDER = db.get_path()
 
@@ -20,8 +20,8 @@ def load_main_page():
 @app.route('/export', methods=["GET"])
 def export_graph():
     end_path = db.export()
-    #print(end_path)
     file_path = os.path.join(UPLOAD_FOLDER, end_path)
+    #file_path = '/var/lib/neo4j/import/test.graphml'
     return send_file(file_path, as_attachment=True)
 
 @app.route('/import', methods=["POST"])
@@ -96,4 +96,5 @@ def find_path():
     finish_id = int(request.args.get("finish_id"))
     return jsonify(alg_controller.find_path(start_id, finish_id))
 
-app.run(host="127.0.0.1", port=3000)
+
+app.run(host="0.0.0.0", port=3000)
