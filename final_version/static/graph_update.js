@@ -435,5 +435,6 @@ function createTable(data) {
     scrollTableDiv.appendChild(table);
 
     var container = document.getElementById("container2");
+    while (container.firstChild) {container.removeChild(container.firstChild);}
     container.appendChild(scrollTableDiv);
 }
