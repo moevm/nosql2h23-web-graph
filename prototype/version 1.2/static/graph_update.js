@@ -27,9 +27,17 @@ class Graph_transformer{
         let id=[];
         Graph.graph.autoPauseRedraw(false);
         Graph.graph.nodeColor("color");
+        Graph.graph.linkWidth((link)=>{
+            if(link.width){
+                return link.width;
+
+            }
+            return Graph.link_width;
+
+        });
         Graph.graph.onNodeClick((node)=>{
             if(Graph_transformer._path_mode_need_clean){
-                Graph.clear_color_prop(true);
+                Graph.clear_color_and_width_prop(true);
                 Graph_transformer._path_mode_need_clean = false;
             }
             node.color = "#FF0000";
@@ -47,7 +55,6 @@ class Graph_transformer{
     static to_inital_state(){
         if(Graph_transformer._path_mode){
             Graph.graph.autoPauseRedraw(true);
-            Graph.clear_color_prop(true);
             Graph_transformer._path_mode=false;
         }
         Graph.inital_state();
@@ -65,7 +72,7 @@ class Graph_transformer{
 
     static _process_find_path(data){
         if(data.length==0){
-            Graph.clear_color_prop();
+            Graph.clear_color_and_width_prop();
             return;
         }
         Graph.color_path(data,"#FFFF00");
@@ -94,6 +101,23 @@ class Graph_transformer{
                 return "#008080"
             }
         return Graph.color_palette[(component_id*43)%Graph.color_palette.length].hexString
+        }
+
+        Graph.graph.linkWidth((link)=>{
+            if(link.width){
+                return link.width;
+
+            }
+            return Graph.link_width;
+
+        });
+        for(let link of Graph.graph.graphData().links){
+            let source_id = link.source.id
+            let target_id = link.target.id
+            if(data[source_id] == data[target_id]){
+                link.color = Graph.color_palette[(data[source_id]*43)%Graph.color_palette.length].hexString
+                link.width = 0.3
+            }
         }
         Graph.graph.nodeColor(color_func);
     }
@@ -180,6 +204,7 @@ class Graph{
     static graph = ForceGraph()
     static color_palette =null;
     static id_map = new Map();
+    static link_width =0.2
 
     static{
         Graph.graph(document.getElementById('container')).graphData({"nodes":[],"links":[]})
@@ -188,6 +213,7 @@ class Graph{
       .linkSource('source')
       .linkTarget('target')
       .linkDirectionalArrowLength(2)
+      .linkWidth(Graph.link_width)
       .onNodeClick(node=>{
         window.open(node.url,'_blank')
       })
@@ -221,8 +247,10 @@ class Graph{
         for(let node of Graph.graph.graphData().nodes){
             node.val = 1;
         }
+        Graph.clear_color_and_width_prop(true)
         Graph.color_by_gropus();
         Graph.reheat();
+        Graph.graph.linkWidth(Graph.link_width);
         Graph.graph.onNodeClick(node=>{
         window.open(node.url,'_blank')});
     }
@@ -256,10 +284,11 @@ class Graph{
             let link_key = `${nodes[prev_index].id}_${nodes[node_index].id}`
             let link_index = Graph.id_map.get(link_key);
             links[link_index].color = color;
+            links[link_index].width = 2;
         }
     }
 
-    static clear_color_prop(clear_links = false){ //медленно?
+    static clear_color_and_width_prop(clear_links = false){ //медленно?
         for(let node of Graph.graph.graphData().nodes){
             if(node.color){
                 delete node.color;
@@ -271,6 +300,9 @@ class Graph{
         for(let link of Graph.graph.graphData().links){
             if(link.color){
                 delete link.color;
+            }
+            if(link.width){
+                delete link.width;
             }
         }
     }
