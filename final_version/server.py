@@ -8,7 +8,9 @@ import os
 
 app = Flask(__name__)
 
+# БД должна быть запущена в контейнере с найстройками docker-compose, иначе host надо менять
 db = DatabaseController(database_url="bolt://neo4j:7687", username="neo4j", password="123456789")
+#db = DatabaseController(database_url="bolt://localhost:7687", username="neo4j", password="123456789")
 alg_controller = Algorithms(db)
 UPLOAD_FOLDER = db.get_path()
 
