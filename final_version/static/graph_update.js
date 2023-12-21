@@ -211,9 +211,11 @@ class Graph{
             Graph.graph.graphData(input);
             Graph._init_id_map();
             
-            var data =
-                [{domain: "github.com", url: "wikipedia.org/some_page"},
-                {domain: "wikipedia",url: "wikipedia.org/some_page"}];
+            let data = []
+            let temp = Graph.graph.graphData().nodes;
+            temp.forEach(function(entry) {
+                data.push({domain: `${entry.domain}`, url: `${entry.url}`})
+            })
             createTable(data);
         })
     }
