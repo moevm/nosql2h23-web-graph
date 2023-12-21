@@ -210,10 +210,12 @@ class Graph{
         fetch(path).then(res => res.json()).then(input =>{
             Graph.graph.graphData(input);
             Graph._init_id_map();
-            
-            var data =
-                [{domain: "github.com", url: "wikipedia.org/some_page"},
-                {domain: "wikipedia",url: "wikipedia.org/some_page"}];
+
+            let data = []
+            let temp = Graph.graph.graphData().nodes;
+            temp.forEach(function(entry) {
+                data.push({domain: `${entry.domain}`, url: `${entry.url}`})
+            })
             createTable(data);
         })
     }
@@ -394,14 +396,15 @@ function createTable(data) {
 
         // Установка ширины столбцов
         if (index === 0) {
-            th.style.width = "30%";
+            th.style.width = "20%";
         } else if (index === 1) {
-            th.style.width = "70%";
+            th.style.width = "80%";
         }
-
         headerRow.appendChild(th);
     });
 
+    thead.style.position = "sticky";
+    thead.style.top = "0";
     thead.appendChild(headerRow);
     table.appendChild(thead);
 
@@ -420,6 +423,8 @@ function createTable(data) {
                 link.textContent = cellData;
                 td.appendChild(link);
             }
+            td.style.wordBreak = "break-all";
+            td.style.textAlign = "center";
             row.appendChild(td);
         });
 
@@ -430,5 +435,6 @@ function createTable(data) {
     scrollTableDiv.appendChild(table);
 
     var container = document.getElementById("container2");
+    while (container.firstChild) {container.removeChild(container.firstChild);}
     container.appendChild(scrollTableDiv);
 }
