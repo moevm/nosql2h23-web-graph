@@ -9,12 +9,12 @@ class Graph_transformer{
     static _path_mode_need_clean = false;
 
     static update_graph_data(){
-       let input_val = document.getElementById('input').value;
+       let input_val = document.getElementById('inp-page_address').value;
         fetch("/",{
             method:'POST',
             body: input_val
         }).then(res=>{
-        Graph.update_data();
+        Graph.update_data("/graph_data");
         });
     }
 
@@ -23,21 +23,14 @@ class Graph_transformer{
     Именно ответ сервера(т.е. список id вешрин) будет передан в качестве агрумента функции callback
     */ 
     static find_path_mode(callback=null){
+        Graph_transformer.to_inital_state()
         Graph_transformer._path_mode = true;
         let id=[];
         Graph.graph.autoPauseRedraw(false);
         Graph.graph.nodeColor("color");
-        Graph.graph.linkWidth((link)=>{
-            if(link.width){
-                return link.width;
-
-            }
-            return Graph.link_width;
-
-        });
         Graph.graph.onNodeClick((node)=>{
             if(Graph_transformer._path_mode_need_clean){
-                Graph.clear_color_and_width_prop(true);
+                Graph.clear_color_prop(true);
                 Graph_transformer._path_mode_need_clean = false;
             }
             node.color = "#FF0000";
@@ -55,6 +48,7 @@ class Graph_transformer{
     static to_inital_state(){
         if(Graph_transformer._path_mode){
             Graph.graph.autoPauseRedraw(true);
+            Graph.clear_color_prop(true);
             Graph_transformer._path_mode=false;
         }
         Graph.inital_state();
@@ -72,7 +66,7 @@ class Graph_transformer{
 
     static _process_find_path(data){
         if(data.length==0){
-            Graph.clear_color_and_width_prop();
+            Graph.clear_color_prop();
             return;
         }
         Graph.color_path(data,"#FFFF00");
@@ -85,6 +79,7 @@ class Graph_transformer{
     т.е. это будет объект ключи которого -id вершин, а значения этих ключей- номер компоненты сильной связности,которой эта
     вершина принадлежит.  */
     static  strongly_connected_algorithm(callback=null){
+        Graph_transformer.to_inital_state()
         let data= fetch('/algorithms/strongly_connected_components');
         data.then(response => response.json()).then((ans) => {
             Graph_transformer._process_strongly_connected(ans);
@@ -102,23 +97,6 @@ class Graph_transformer{
             }
         return Graph.color_palette[(component_id*43)%Graph.color_palette.length].hexString
         }
-
-        Graph.graph.linkWidth((link)=>{
-            if(link.width){
-                return link.width;
-
-            }
-            return Graph.link_width;
-
-        });
-        for(let link of Graph.graph.graphData().links){
-            let source_id = link.source.id
-            let target_id = link.target.id
-            if(data[source_id] == data[target_id]){
-                link.color = Graph.color_palette[(data[source_id]*43)%Graph.color_palette.length].hexString
-                link.width = 0.3
-            }
-        }
         Graph.graph.nodeColor(color_func);
     }
 
@@ -127,6 +105,7 @@ class Graph_transformer{
     Этот ответ будет иметь следующий вид: {235:0.153, 236:0.458, 237:0.786, 238:0.12, 239:0.141 }
     т.е. это будет объект ключи которого -id вершин, а значения этих ключей- значение page_rank для вершины с этим id.  */
     static page_rank_algorithm(callback=null){
+        Graph_transformer.to_inital_state()
         let res = {}
         let promise = fetch("/algorithms/page_rank")
         promise.then(resp=> resp.json()).then((ans)=>{
@@ -182,6 +161,7 @@ class Graph_transformer{
     т.е. это будет объект ключи которого -id вершин, а значения этих ключей- величина выбранной центральности(зависит от type)
     для вершины с этим id  */
     static centrality_algorithm(type,callback=null){
+        Graph_transformer.to_inital_state()
         let res= {};
         let promise = fetch(`/algorithms/centrality?type=${type}`)
         promise.then(resp=>resp.json()).then((ans)=>{
@@ -200,34 +180,43 @@ class Graph_transformer{
     }
 }
 
+
+
 class Graph{
+
     static graph = ForceGraph()
     static color_palette =null;
     static id_map = new Map();
-    static link_width =0.2
 
     static{
-        Graph.graph(document.getElementById('container')).graphData({"nodes":[],"links":[]})
+        Graph.graph(document.getElementById('container1')).graphData({"nodes":[],"links":[]})
       .nodeId('id')
       .nodeLabel('domain')
       .linkSource('source')
       .linkTarget('target')
       .linkDirectionalArrowLength(2)
-      .linkWidth(Graph.link_width)
+    //.nodeAutoColorBy('group')
       .onNodeClick(node=>{
         window.open(node.url,'_blank')
       })
 
       fetch('/static/colors.json').then(resp => resp.json()).then((colors)=>{Graph.color_palette=colors});
       Graph.color_by_gropus();
-      Graph.graph.width(document.getElementById('container').offsetWidth);
-      Graph.graph.height(document.getElementById('container').offsetHeight);
+      Graph.graph.width(document.getElementById('container1').offsetWidth);
+      Graph.graph.height(document.getElementById('container1').offsetHeight);
     }
 
-    static update_data(){
-        fetch("/graph_data").then(res => res.json()).then(input =>{
-        Graph.graph.graphData(input);
-        Graph._init_id_map();
+    static update_data(path){
+        fetch(path).then(res => res.json()).then(input =>{
+            Graph.graph.graphData(input);
+            Graph._init_id_map();
+          
+            let data = []
+            let temp = Graph.graph.graphData().nodes;
+            temp.forEach(function(entry) {
+                data.push({domain: `${entry.domain}`, url: `${entry.url}`})
+            })
+            createTable(data);
         })
     }
 
@@ -247,10 +236,8 @@ class Graph{
         for(let node of Graph.graph.graphData().nodes){
             node.val = 1;
         }
-        Graph.clear_color_and_width_prop(true)
         Graph.color_by_gropus();
         Graph.reheat();
-        Graph.graph.linkWidth(Graph.link_width);
         Graph.graph.onNodeClick(node=>{
         window.open(node.url,'_blank')});
     }
@@ -284,11 +271,10 @@ class Graph{
             let link_key = `${nodes[prev_index].id}_${nodes[node_index].id}`
             let link_index = Graph.id_map.get(link_key);
             links[link_index].color = color;
-            links[link_index].width = 2;
         }
     }
 
-    static clear_color_and_width_prop(clear_links = false){ //медленно?
+    static clear_color_prop(clear_links = false){ //медленно?
         for(let node of Graph.graph.graphData().nodes){
             if(node.color){
                 delete node.color;
@@ -300,9 +286,6 @@ class Graph{
         for(let link of Graph.graph.graphData().links){
             if(link.color){
                 delete link.color;
-            }
-            if(link.width){
-                delete link.width;
             }
         }
     }
@@ -322,7 +305,6 @@ class Graph{
         return {domain:node.domain, url:node_url};
     }
 
-    //получение списка с информацией обо всех узлах
     static get_all_nodes_info(){
         let nodes = Graph.graph.graphData.nodes;
         let result = [];
@@ -335,5 +317,124 @@ class Graph{
 }
 
 function load_links(){
-   Graph_transformer.update_graph_data();
+    Graph_transformer.update_graph_data();
+}
+
+function getLastGraph(){
+    Graph.update_data("/graph_data");
+}
+
+function getAllGraph(){
+    Graph.update_data("/all_graph");
+}
+
+function getCentrality(){
+    let el = document.getElementById('sel-centr');
+    let option = el.options[el.selectedIndex].value;
+
+    switch(option) {
+        case "0": 
+            Graph_transformer.centrality_algorithm(Centrality_types.ClOSENESS);
+            break;
+        case "1": 
+            Graph_transformer.centrality_algorithm(Centrality_types.DEGREE);
+            break;
+        case "2":
+            Graph_transformer.centrality_algorithm(Centrality_types.BETWEENNESS);
+            break;
+        default:
+            break;
+    }
+}
+
+function export_graph(){
+    window.location.href = "/export";
+}
+
+function import_graph(){
+    let input = document.createElement('input');
+    input.type = 'file';
+
+    input.addEventListener('change', function () {
+        if (input.files.length > 0) {
+            var file = input.files[0];
+            upload_file(file);
+
+            input.value = '';
+        }
+    });
+    input.click();
+}
+
+function upload_file(file) {
+    let formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/import', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+}
+
+
+function createTable(data) {
+
+    var scrollTableDiv = document.createElement("div");
+    scrollTableDiv.className = "scroll-table";
+
+    var table = document.createElement("table");
+    var thead = document.createElement("thead");
+    var headerRow = document.createElement("tr");
+
+    // Заголовки столбцов
+    var headers = ["Домен", "URL"];
+
+    headers.forEach(function(headerText, index) {
+        var th = document.createElement("th");
+        th.textContent = headerText;
+
+        // Установка ширины столбцов
+        if (index === 0) {
+            th.style.width = "20%";
+        } else if (index === 1) {
+            th.style.width = "80%";
+        }
+        headerRow.appendChild(th);
+    });
+
+    thead.style.position = "sticky";
+    thead.style.top = "0";
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    var tbody = document.createElement("tbody");
+
+    data.forEach(function(rowData) {
+        var row = document.createElement("tr");
+
+        Object.values(rowData).forEach(function(cellData, index) {
+            var td = document.createElement("td");
+            if (index === 0) { // Домен
+                td.textContent = cellData;
+            } else if (index === 1) { // URL
+                var link = document.createElement("a");
+                link.href = cellData;
+                link.textContent = cellData;
+                td.appendChild(link);
+            }
+            td.style.wordBreak = "break-all";
+            td.style.textAlign = "center";
+            row.appendChild(td);
+        });
+
+        tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    scrollTableDiv.appendChild(table);
+
+    var container = document.getElementById("container2");
+    while (container.firstChild) {container.removeChild(container.firstChild);}
+    container.appendChild(scrollTableDiv);
 }
