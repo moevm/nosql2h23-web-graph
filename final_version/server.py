@@ -11,6 +11,8 @@ app = Flask(__name__)
 # БД должна быть запущена в контейнере с найстройками docker-compose, иначе host надо менять
 db = DatabaseController(database_url="bolt://neo4j:7687", username="neo4j", password="123456789")
 #db = DatabaseController(database_url="bolt://localhost:7687", username="neo4j", password="123456789")
+#db = DatabaseController(database_url="bolt://localhost:7687", username="Anton_Korsunov", password="123456789")
+
 alg_controller = Algorithms(db)
 UPLOAD_FOLDER = db.get_path()
 
@@ -97,6 +99,15 @@ def find_path():
     start_id = int(request.args.get("start_id"))
     finish_id = int(request.args.get("finish_id"))
     return jsonify(alg_controller.find_path(start_id, finish_id))
+
+@app.route('/table', methods=["POST"])
+def get_table():
+    direction = request.data.decode(encoding="utf-8")
+    check = Adapter.get_table(db, direction)
+    if check:
+        return check
+    else:
+        return jsonify({"message": "List is empty"})
 
 
 app.run(host="0.0.0.0", port=3000)

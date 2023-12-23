@@ -23,6 +23,7 @@ class Graph_transformer{
     Именно ответ сервера(т.е. список id вешрин) будет передан в качестве агрумента функции callback
     */ 
     static find_path_mode(callback=null){
+        alerts("Find-path");
         Graph_transformer.to_inital_state()
         Graph_transformer._path_mode = true;
         let id=[];
@@ -79,6 +80,7 @@ class Graph_transformer{
     т.е. это будет объект ключи которого -id вершин, а значения этих ключей- номер компоненты сильной связности,которой эта
     вершина принадлежит.  */
     static  strongly_connected_algorithm(callback=null){
+        alerts("Strongly-connected");
         Graph_transformer.to_inital_state()
         let data= fetch('/algorithms/strongly_connected_components');
         data.then(response => response.json()).then((ans) => {
@@ -105,6 +107,7 @@ class Graph_transformer{
     Этот ответ будет иметь следующий вид: {235:0.153, 236:0.458, 237:0.786, 238:0.12, 239:0.141 }
     т.е. это будет объект ключи которого -id вершин, а значения этих ключей- значение page_rank для вершины с этим id.  */
     static page_rank_algorithm(callback=null){
+        alerts("Page-rank");
         Graph_transformer.to_inital_state()
         let res = {}
         let promise = fetch("/algorithms/page_rank")
@@ -329,6 +332,7 @@ function getAllGraph(){
 }
 
 function getCentrality(){
+    alerts("Get-centrality");
     let el = document.getElementById('sel-centr');
     let option = el.options[el.selectedIndex].value;
 
@@ -375,6 +379,21 @@ function upload_file(file) {
         body: formData
     })
     .then(response => response.json())
+    .then(alerts("Import-alert"));
+}
+
+function alerts(alert_elemnt) {
+    const dialog_tab = document.getElementById(alert_elemnt);
+
+    dialog_tab.show();
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.addEventListener('click', () => {
+        dialog_tab.close();
+        dialog_tab.removeChild(closeButton);
+    });
+
+    dialog_tab.appendChild(closeButton);
 }
 
 
